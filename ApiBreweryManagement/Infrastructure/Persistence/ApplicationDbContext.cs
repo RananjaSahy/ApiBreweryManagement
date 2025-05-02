@@ -31,6 +31,16 @@ namespace ApiBreweryManagement.Infrastructure.Persistence
                 .HasOne(ws => ws.Beer)
                 .WithMany(b => b.WholesalerStocks)
                 .HasForeignKey(ws => ws.BeerId);
+
+            modelBuilder.Entity<Brewery>().HasData(
+                new Brewery { Id = 1, Name = "Brewery A" },
+                new Brewery { Id = 2, Name = "Brewery B" }
+            );
+
+            modelBuilder.Entity<Wholesaler>().HasData(
+                new Wholesaler { Id = 1, Name = "Wholesaler X"  },
+                new Wholesaler { Id = 2, Name = "Wholesaler Y" }
+            );
         }
 
     }

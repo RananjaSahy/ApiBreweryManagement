@@ -3,6 +3,7 @@ using System;
 using ApiBreweryManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApiBreweryManagement.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250502081538_SeedInitialData")]
+    partial class SeedInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace ApiBreweryManagement.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("BreweryId");
 
-                    b.ToTable("Beers", (string)null);
+                    b.ToTable("Beers");
                 });
 
             modelBuilder.Entity("ApiBreweryManagement.Domain.Entities.Brewery", b =>
@@ -81,7 +84,7 @@ namespace ApiBreweryManagement.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Breweries", (string)null);
+                    b.ToTable("Breweries");
 
                     b.HasData(
                         new
@@ -121,7 +124,7 @@ namespace ApiBreweryManagement.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Wholesalers", (string)null);
+                    b.ToTable("Wholesalers");
 
                     b.HasData(
                         new
@@ -169,7 +172,7 @@ namespace ApiBreweryManagement.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("WholesalerId");
 
-                    b.ToTable("WholesalerStocks", (string)null);
+                    b.ToTable("WholesalerStocks");
                 });
 
             modelBuilder.Entity("ApiBreweryManagement.Domain.Entities.Beer", b =>

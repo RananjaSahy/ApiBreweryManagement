@@ -6,7 +6,12 @@ namespace ApiBreweryManagement.Application.UseCases.Wholesalers.Queries.GetQuote
     public class GetQuoteQuery
     {
         public int WholesalerId { get; set; }
-        public List<(int BeerId, int Quantity)> Order { get; set; } = new();
+        public List<OrderItem> Orders { get; set; } = new();
+    }
+    public class OrderItem
+    {
+        public int BeerId { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class GetQuoteHandler
@@ -20,14 +25,15 @@ namespace ApiBreweryManagement.Application.UseCases.Wholesalers.Queries.GetQuote
 
         public async Task<decimal> Handle(GetQuoteQuery query)
         {
-            if (query.Order == null || !query.Order.Any())
+            if (query.Orders == null || !query.Orders.Any())
                 throw new ArgumentException("La commande ne peut pas être vide.");
 
-            if (query.Order.GroupBy(o => o.BeerId).Any(g => g.Count() > 1))
+            if (query.Orders.GroupBy(o => o.BeerId).Any(g => g.Count() > 1))
                 throw new ArgumentException("La commande ne peut pas contenir de doublons.");
 
             var wholesaler = await _context.Wholesalers
                 .Include(w => w.WholesalerStocks)
+                .ThenInclude(w => w.Beer)
                 .FirstOrDefaultAsync(w => w.Id == query.WholesalerId);
 
             if (wholesaler == null)
@@ -36,7 +42,7 @@ namespace ApiBreweryManagement.Application.UseCases.Wholesalers.Queries.GetQuote
             decimal totalPrice = 0;
             int totalQuantity = 0;
 
-            foreach (var orderItem in query.Order)
+            foreach (OrderItem orderItem in query.Orders)
             {
                 var stock = wholesaler.WholesalerStocks.FirstOrDefault(ws => ws.BeerId == orderItem.BeerId);
 
