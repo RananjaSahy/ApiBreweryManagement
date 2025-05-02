@@ -11,7 +11,8 @@ builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>((serv
 {
     var interceptor = serviceProvider.GetRequiredService<EntityBaseAuditableInterceptor>();
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .AddInterceptors(interceptor);
+           .AddInterceptors(interceptor)
+           .UseLazyLoadingProxies();
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
